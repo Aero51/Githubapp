@@ -3,8 +3,7 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=androidstudio,android
 
 
-# api key is here and gradle properties are a local file
-/gradle.properties
+
 
 
 ### Android ###
