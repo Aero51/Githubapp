@@ -17,7 +17,10 @@ import com.aero51.githubapp.retrofit.GithubServiceClient;
 import com.aero51.githubapp.utils.AppExecutors;
 
 import static com.aero51.githubapp.utils.Constants.DATABASE_PAGE_SIZE;
+import static com.aero51.githubapp.utils.Constants.FORKS_SORT_FLAG;
 import static com.aero51.githubapp.utils.Constants.LOG;
+import static com.aero51.githubapp.utils.Constants.STARS_SORT_FLAG;
+import static com.aero51.githubapp.utils.Constants.UPDATED_SORT_FLAG;
 
 /**
  * Repository class that works with local and remote data sources.
@@ -46,11 +49,27 @@ public class MainRepository {
     /**
      * Search repositories whose names match the query.
      */
-    public RepoSearchResult search(String query) {
+    public RepoSearchResult search(String query, Integer sortFlag) {
         Log.d(LOG, "search: New query: " + query);
 
+        DataSource.Factory<Integer, Repo> repos;
         // Get data source factory from the local cache
-        DataSource.Factory<Integer, Repo> reposByName = localCache.reposByName(query);
+
+        switch (sortFlag) {
+            case STARS_SORT_FLAG:
+                repos = localCache.reposByStars(query);
+                break;
+            case FORKS_SORT_FLAG:
+                repos = localCache.reposByForks(query);
+                break;
+
+            case UPDATED_SORT_FLAG:
+                repos = localCache.reposByUpdated(query);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + sortFlag);
+        }
+
 
         // Construct the boundary callback
         RepoBoundaryCallback boundaryCallback = new RepoBoundaryCallback(query, githubApi, localCache);
@@ -63,7 +82,7 @@ public class MainRepository {
                 .build();
 
         // Get the Live Paged list
-        LiveData<PagedList<Repo>> data = new LivePagedListBuilder<>(reposByName, pagedConfig)
+        LiveData<PagedList<Repo>> data = new LivePagedListBuilder<>(repos, pagedConfig)
                 .setBoundaryCallback(boundaryCallback)
                 .build();
 

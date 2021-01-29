@@ -47,11 +47,18 @@ public class GithubLocalCache {
      *
      * @param name repository name
      */
-    public DataSource.Factory<Integer, Repo> reposByName(String name) {
+    public DataSource.Factory<Integer, Repo> reposByStars(String name) {
         // appending '%' so we can allow other characters to be before and after the query string
-        return repoDao.reposByName("%" + name.replace(' ', '%') + "%");
+        return repoDao.reposByStars("%" + name.replace(' ', '%') + "%");
     }
-
+    public DataSource.Factory<Integer, Repo> reposByForks(String name) {
+        // appending '%' so we can allow other characters to be before and after the query string
+        return repoDao.reposByForks("%" + name.replace(' ', '%') + "%");
+    }
+    public DataSource.Factory<Integer, Repo> reposByUpdated(String name) {
+        // appending '%' so we can allow other characters to be before and after the query string
+        return repoDao.reposByUpdated("%" + name.replace(' ', '%') + "%");
+    }
     public interface InsertCallback {
         /**
          * Callback method invoked when the insert operation

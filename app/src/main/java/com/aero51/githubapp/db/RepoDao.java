@@ -21,5 +21,13 @@ public interface RepoDao {
     // and order those results descending, by the number of stars and then by name ascending
     @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE " +
             ":queryString) ORDER BY stars DESC, name ASC")
-    DataSource.Factory<Integer, Repo> reposByName(String queryString);
+    DataSource.Factory<Integer, Repo> reposByStars(String queryString);
+
+    @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE " +
+            ":queryString) ORDER BY forks DESC, name ASC")
+    DataSource.Factory<Integer, Repo> reposByForks(String queryString);
+
+    @Query("SELECT * FROM repos WHERE (name LIKE :queryString) OR (description LIKE " +
+            ":queryString) ORDER BY updated DESC, name ASC")
+    DataSource.Factory<Integer, Repo> reposByUpdated(String queryString);
 }

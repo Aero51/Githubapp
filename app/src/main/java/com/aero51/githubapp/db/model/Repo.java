@@ -42,6 +42,10 @@ public class Repo {
     @SerializedName("open_issues_count")
     public int openIssues;
 
+
+    @SerializedName("updated_at")
+    public String updated;
+
     @Embedded
     public RepoOwner owner;
 

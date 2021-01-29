@@ -20,8 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.aero51.githubapp.db.model.Repo;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static com.aero51.githubapp.utils.Constants.DEFAULT_QUERY;
+import static com.aero51.githubapp.utils.Constants.DEFAULT_SORT_FLAG;
 import static com.aero51.githubapp.utils.Constants.LAST_SEARCH_QUERY;
+import static com.aero51.githubapp.utils.Constants.LAST_SORT_FLAG;
 import static com.aero51.githubapp.utils.Constants.LOG;
 
 public class MainFragment extends Fragment {
@@ -33,6 +38,9 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private MainAdapter adapter;
 
+    private Integer sortFlag;
+    private String query;
+
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -43,15 +51,20 @@ public class MainFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Get the query to search
-         String query = DEFAULT_QUERY;
+         query = DEFAULT_QUERY;
+        sortFlag = DEFAULT_SORT_FLAG;
         if (savedInstanceState != null) {
             query = savedInstanceState.getString(LAST_SEARCH_QUERY, DEFAULT_QUERY);
+            sortFlag = savedInstanceState.getInt(LAST_SORT_FLAG, DEFAULT_SORT_FLAG);
         }
         mViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication())).get(MainViewModel.class);
         sharedViewModel = new ViewModelProvider(getActivity()).get(SharedViewModel.class);
 
+
+        Map<Integer, String> map = new HashMap<>();
+        map.put(sortFlag, query);
         //Post the query to be searched
-        mViewModel.searchRepo(query);
+        mViewModel.searchRepo(map);
     }
 
     @Nullable
@@ -80,8 +93,6 @@ public class MainFragment extends Fragment {
     }
 
 
-
-
     /**
      * Initializes the Adapter of RecyclerView which is {@link MainAdapter}
      */
@@ -102,7 +113,7 @@ public class MainFragment extends Fragment {
         });
     }
 
-    private void observeSearchQuery(){
+    private void observeSearchQuery() {
         sharedViewModel.getSearchQuery().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String query) {
@@ -111,11 +122,14 @@ public class MainFragment extends Fragment {
             }
         });
     }
-    private void observeSortFlags(){
+
+    private void observeSortFlags() {
         sharedViewModel.getSortFlag().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Integer integer) {
-                Log.d(LOG, "MainFragment get sort flag: " + integer);
+            public void onChanged(Integer flag) {
+                Log.d(LOG, "MainFragment get sort flag: " + flag);
+                sortFlag = flag;
+                updateRepoListFromInput(query);
             }
         });
 
@@ -135,18 +149,28 @@ public class MainFragment extends Fragment {
             emptyListTextView.setVisibility(View.GONE);
         }
     }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(LAST_SEARCH_QUERY, mViewModel.lastQueryValue());
+        String query = "";
+        Integer sortFlag = null;
+        for (Map.Entry<Integer, String> me : mViewModel.lastQueryValue().entrySet()) {
+            query = me.getValue();
+            sortFlag = me.getKey();
+        }
+        outState.putString(LAST_SEARCH_QUERY, query);
+        outState.putInt(LAST_SORT_FLAG, sortFlag);
     }
 
 
     private void updateRepoListFromInput(String query) {
         if (!TextUtils.isEmpty(query)) {
             recyclerView.scrollToPosition(0);
+            Map<Integer, String> map = new HashMap<>();
+            map.put(sortFlag, query);
             //Posts the query to be searched
-            mViewModel.searchRepo(query);
+            mViewModel.searchRepo(map);
             //Resets the old list
             adapter.submitList(null);
         }

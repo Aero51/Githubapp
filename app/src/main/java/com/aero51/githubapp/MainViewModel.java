@@ -14,6 +14,10 @@ import androidx.paging.PagedList;
 import com.aero51.githubapp.db.model.Repo;
 import com.aero51.githubapp.utils.AppExecutors;
 
+import java.util.Map;
+
+import static com.aero51.githubapp.utils.Constants.STARS_SORT_FLAG;
+
 public class MainViewModel extends AndroidViewModel {
     private MainRepository mainRepository;
 
@@ -24,15 +28,24 @@ public class MainViewModel extends AndroidViewModel {
         mainRepository =new MainRepository(executors,application);
     }
 
-    private MutableLiveData<String> queryLiveData = new MutableLiveData<>();
+    private MutableLiveData<Map<Integer,String>> queryLiveData = new MutableLiveData<>();
     //Applying transformation to get RepoSearchResult for the given Search Query
-    private LiveData<RepoSearchResult> repoResult = Transformations.map(queryLiveData,
-            new Function<String, RepoSearchResult>() {
+    private LiveData<RepoSearchResult> repoResult = Transformations.map(queryLiveData, new Function<Map<Integer, String>, RepoSearchResult>() {
                 @Override
-                public RepoSearchResult apply(String inputQuery) {
-                    return mainRepository.search(inputQuery);
+                public RepoSearchResult apply(Map<Integer, String> input) {
+                    //String query =input.get(STARS_SORT_FLAG);
+                    String query="";
+                    Integer sortFlag = null;
+                    //return mainRepository.search(inputQuery,sortFlag);
+                    for (Map.Entry<Integer, String> me : input.entrySet()) {
+                        query=me.getValue();
+                        sortFlag=me.getKey();
+
+                    }
+                    return mainRepository.search(query,sortFlag);
                 }
             }
+
     );
     //Applying transformation to get Live PagedList<Repo> from the RepoSearchResult
     private LiveData<PagedList<Repo>> repos = Transformations.switchMap(repoResult,
@@ -60,15 +73,15 @@ public class MainViewModel extends AndroidViewModel {
     /**
      * Search a repository based on a query string.
      */
-    void searchRepo(String queryString) {
-        queryLiveData.postValue(queryString);
+    void searchRepo(Map<Integer,String>queryMap) {
+        queryLiveData.postValue(queryMap);
     }
 
     /**
      * Get the last query value.
      */
     @Nullable
-    String lastQueryValue() {
+    Map<Integer,String> lastQueryValue() {
         return queryLiveData.getValue();
     }
 
