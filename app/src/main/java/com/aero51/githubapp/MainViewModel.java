@@ -16,7 +16,6 @@ import com.aero51.githubapp.utils.AppExecutors;
 
 import java.util.Map;
 
-import static com.aero51.githubapp.utils.Constants.STARS_SORT_FLAG;
 
 public class MainViewModel extends AndroidViewModel {
     private MainRepository mainRepository;
