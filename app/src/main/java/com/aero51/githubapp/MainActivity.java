@@ -14,10 +14,13 @@ import android.view.View;
 
 import com.aero51.githubapp.utils.Constants;
 
+import dagger.hilt.android.AndroidEntryPoint;
+
 import static com.aero51.githubapp.utils.Constants.FORKS_SORT_FLAG;
 import static com.aero51.githubapp.utils.Constants.STARS_SORT_FLAG;
 import static com.aero51.githubapp.utils.Constants.UPDATED_SORT_FLAG;
 
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     private SharedViewModel sharedViewModel;
 
@@ -26,14 +29,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         sharedViewModel = new ViewModelProvider(this).get(SharedViewModel.class);
-        if (savedInstanceState == null) {
+      /*  if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.container, MainFragment.newInstance())
+                    .replace(R.id.container, new NewMainFragment())
                     .commitNow();
         }
-
+*/
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -60,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onCreateOptionsMenu(menu);
     }
+*/
+
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
