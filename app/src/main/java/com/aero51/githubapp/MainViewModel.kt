@@ -10,7 +10,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class NewMainViewModel @Inject constructor(private val repository: NewMainRepository) : ViewModel() {
+class MainViewModel @Inject constructor(private val repository: MainRepository) : ViewModel() {
     private val currentQuery = MutableLiveData(DEFAULT_QUERY)
     val repos = currentQuery.switchMap { queryString ->
         repository.getSearchResults(queryString).cachedIn(viewModelScope)

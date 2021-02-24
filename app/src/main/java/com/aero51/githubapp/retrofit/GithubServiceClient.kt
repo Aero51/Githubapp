@@ -1,23 +1,15 @@
 package com.aero51.githubapp.retrofit
 
-import android.util.Log
-import com.aero51.githubapp.db.model.Repo
-import com.aero51.githubapp.db.model.RepoSearchResponse
+import com.aero51.githubapp.model.Repo
 import com.aero51.githubapp.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.internal.managers.ApplicationComponentManager
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
-import java.util.*
 import javax.inject.Singleton
 
 /**

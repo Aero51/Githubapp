@@ -1,4 +1,4 @@
-package com.aero51.githubapp.db.model
+package com.aero51.githubapp.model
 
 import com.google.gson.annotations.SerializedName
 

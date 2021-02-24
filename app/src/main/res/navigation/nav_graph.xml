@@ -7,7 +7,20 @@
 
     <fragment
         android:id="@+id/mainFragment"
-        android:name="com.aero51.githubapp.NewMainFragment"
+        android:name="com.aero51.githubapp.MainFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.aero51.githubapp.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <argument
+            android:name="repo"
+            app:argType="com.aero51.githubapp.db.model.Repo" />
+    </fragment>
 </navigation>

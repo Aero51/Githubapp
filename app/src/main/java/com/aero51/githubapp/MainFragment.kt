@@ -8,13 +8,17 @@ import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.aero51.githubapp.databinding.MainFragmentBinding
+import com.aero51.githubapp.model.Repo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class NewMainFragment : Fragment(R.layout.main_fragment) {
-    private val viewModel by viewModels<NewMainViewModel>()
+class MainFragment : Fragment(R.layout.main_fragment),MainAdapter.OnItemClickListener {
+    private val viewModel by viewModels<MainViewModel>()
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -23,10 +27,16 @@ class NewMainFragment : Fragment(R.layout.main_fragment) {
         _binding = MainFragmentBinding.bind(view)
 
 
-        val adapter = NewMainAdapter()
+        val adapter = MainAdapter(this)
         binding.apply {
             recyclerView.setHasFixedSize(true)
             recyclerView.itemAnimator=null
+            recyclerView.addItemDecoration(
+                    DividerItemDecoration(
+                            context,
+                            LinearLayoutManager.VERTICAL
+                    )
+            )
             recyclerView.adapter = adapter.withLoadStateHeaderAndFooter(
                     header = GithubLoadStateAdapter {adapter.retry()},
                     footer = GithubLoadStateAdapter {adapter.retry()}
@@ -88,5 +98,10 @@ class NewMainFragment : Fragment(R.layout.main_fragment) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onItemClick(repo: Repo) {
+        val action =MainFragmentDirections.actionMainFragmentToDetailsFragment(repo)
+        findNavController().navigate(action)
     }
 }

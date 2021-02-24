@@ -1,8 +1,7 @@
 package com.aero51.githubapp.retrofit
 
 import retrofit2.http.GET
-import com.aero51.githubapp.db.model.RepoSearchResponse
-import retrofit2.Call
+import com.aero51.githubapp.model.RepoSearchResponse
 import retrofit2.http.Query
 
 interface GithubApi {

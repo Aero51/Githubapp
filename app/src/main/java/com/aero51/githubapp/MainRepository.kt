@@ -7,7 +7,7 @@ import com.aero51.githubapp.data.GithubPagingSource
 import com.aero51.githubapp.retrofit.GithubApi
 import javax.inject.Inject
 
-class NewMainRepository @Inject constructor(private val githubApi: GithubApi) {
+class MainRepository @Inject constructor(private val githubApi: GithubApi) {
 
     fun getSearchResults(query: String) =
             Pager(

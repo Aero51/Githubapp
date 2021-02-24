@@ -2,7 +2,7 @@ package com.aero51.githubapp.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.aero51.githubapp.db.model.Repo
+import com.aero51.githubapp.model.Repo
 import com.aero51.githubapp.retrofit.GithubApi
 import com.aero51.githubapp.utils.Constants.GITHUB_FIRST_PAGE
 import retrofit2.HttpException
