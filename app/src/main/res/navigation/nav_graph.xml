@@ -21,6 +21,6 @@
         tools:layout="@layout/fragment_details" >
         <argument
             android:name="repo"
-            app:argType="com.aero51.githubapp.db.model.Repo" />
+            app:argType="com.aero51.githubapp.model.Repo" />
     </fragment>
 </navigation>
