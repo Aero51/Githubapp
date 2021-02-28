@@ -5,8 +5,10 @@ import com.aero51.githubapp.model.RepoSearchResponse
 import retrofit2.http.Query
 
 interface GithubApi {
-    @GET("search/repositories?sort=stars")
+    //@GET("search/repositories?sort=stars")
+    @GET("search/repositories")
     suspend fun searchRepos(@Query("q") query: String,
-                    @Query("page") page: Int,
-                    @Query("per_page") itemsPerPage: Int): RepoSearchResponse
+                            @Query("sort") sort: String,
+                            @Query("page") page: Int,
+                            @Query("per_page") itemsPerPage: Int): RepoSearchResponse
 }

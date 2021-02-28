@@ -10,12 +10,13 @@ import java.io.IOException
 
 class GithubPagingSource(
         private val githubApi: GithubApi,
-        private val query: String
+        private val query: String,
+        private val sort:String
 ) : PagingSource<Int, Repo>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {
         val position = params.key ?: GITHUB_FIRST_PAGE
         return try {
-            val response = githubApi.searchRepos(query, position, params.loadSize)
+            val response = githubApi.searchRepos(query,sort, position, params.loadSize)
             val repos = response.items
             LoadResult.Page(
                     data = repos,

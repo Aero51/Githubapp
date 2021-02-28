@@ -9,13 +9,13 @@ import javax.inject.Inject
 
 class MainRepository @Inject constructor(private val githubApi: GithubApi) {
 
-    fun getSearchResults(query: String) =
+    fun getSearchResults(query: String,sort:String) =
             Pager(
                     config = PagingConfig(
                             pageSize = 20,
                             maxSize = 100,
                             enablePlaceholders = false
                     ),
-                    pagingSourceFactory = {GithubPagingSource(githubApi,query)}
+                    pagingSourceFactory = {GithubPagingSource(githubApi,query,sort)}
             ).liveData
 }

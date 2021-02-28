@@ -3,6 +3,7 @@ package com.aero51.githubapp
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.isVisible
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.aero51.githubapp.databinding.MainFragmentBinding
 import com.aero51.githubapp.model.Repo
+import com.aero51.githubapp.utils.Constants
+import com.aero51.githubapp.utils.SortOrder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -21,6 +24,8 @@ class MainFragment : Fragment(R.layout.main_fragment),MainAdapter.OnItemClickLis
     private val viewModel by viewModels<MainViewModel>()
     private var _binding: MainFragmentBinding? = null
     private val binding get() = _binding!!
+    private var searchQuery:String=Constants.DEFAULT_QUERY
+    private var sortOrder:SortOrder=SortOrder.BY_STARS
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -84,7 +89,8 @@ class MainFragment : Fragment(R.layout.main_fragment),MainAdapter.OnItemClickLis
 
                 if (query != null) {
                     binding.recyclerView.scrollToPosition(0)
-                    viewModel.searchRepos(query)
+                    searchQuery=query
+                    viewModel.searchRepos(searchQuery,sortOrder)
                     searchView.clearFocus()
                 }
                 return true
@@ -95,6 +101,28 @@ class MainFragment : Fragment(R.layout.main_fragment),MainAdapter.OnItemClickLis
             }
         })
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.action_sort_by_stars -> {
+                sortOrder=SortOrder.BY_STARS
+                viewModel.searchRepos(searchQuery,sortOrder)
+                true
+            }
+            R.id.action_sort_by_forks -> {
+                sortOrder=SortOrder.BY_FORKS
+                viewModel.searchRepos(searchQuery,sortOrder)
+                true
+            }
+            R.id.action_sort_by_updated -> {
+                sortOrder=SortOrder.BY_UPDATED
+                viewModel.searchRepos(searchQuery,sortOrder)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

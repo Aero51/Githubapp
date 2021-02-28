@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.aero51.githubapp.MainFragment"
-        android:label="main_fragment"
+        android:label="Repos"
         tools:layout="@layout/main_fragment" >
         <action
             android:id="@+id/action_mainFragment_to_detailsFragment"

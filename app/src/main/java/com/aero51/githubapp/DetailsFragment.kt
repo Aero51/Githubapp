@@ -64,7 +64,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 
 
             textViewCreator.apply {
-                text = "Photo of ${args.repo.name} user on github "
+                text = "Repo of ${args.repo.name} user on github "
                 setOnClickListener {
                     context.startActivity(intent)
                 }
